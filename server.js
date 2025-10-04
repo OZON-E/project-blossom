@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' ? false : true,
+    origin: true,
     credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -16,8 +16,52 @@ app.use(express.static(path.join(__dirname), {
     maxAge: process.env.NODE_ENV === 'production' ? '1d' : '0'
 }));
 
+// Serve static files explicitly with proper MIME types and cache busting
+app.get('/styles.css', (req, res) => {
+    res.setHeader('Content-Type', 'text/css');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.sendFile(path.join(__dirname, 'styles.css'));
+});
+
+app.get('/script.js', (req, res) => {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.sendFile(path.join(__dirname, 'script.js'));
+});
+
+app.get('/config.js', (req, res) => {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.sendFile(path.join(__dirname, 'config.js'));
+});
+
+// Serve image files explicitly
+app.get('/blossompix.png', (req, res) => {
+    res.setHeader('Content-Type', 'image/png');
+    res.sendFile(path.join(__dirname, 'blossompix.png'));
+});
+
+app.get('/twitter button.png', (req, res) => {
+    res.setHeader('Content-Type', 'image/png');
+    res.sendFile(path.join(__dirname, 'twitter button.png'));
+});
+
+app.get('/Github button.png', (req, res) => {
+    res.setHeader('Content-Type', 'image/png');
+    res.sendFile(path.join(__dirname, 'Github button.png'));
+});
+
 // Serve the main HTML file
 app.get('/', (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
@@ -29,8 +73,8 @@ app.post('/api/generate-art', async (req, res) => {
         const { prompt, apiKey } = req.body;
         
         // Use server-side API key if client doesn't provide one
-        const { CLAUDE_API_KEY } = require('./config.js');
-        const finalApiKey = apiKey && apiKey !== 'YOUR_CLAUDE_API_KEY_HERE' ? apiKey : CLAUDE_API_KEY;
+        const serverApiKey = process.env.CLAUDE_API_KEY || require('./config.js').CLAUDE_API_KEY;
+        const finalApiKey = apiKey && apiKey !== 'YOUR_CLAUDE_API_KEY_HERE' ? apiKey : serverApiKey;
         
         if (!finalApiKey || finalApiKey === 'YOUR_CLAUDE_API_KEY_HERE') {
             return res.status(400).json({ 
