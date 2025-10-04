@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJECT BLOSSOM</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Intro Page -->
+    <div class="intro-page" id="introPage">
+        <div class="intro-content">
+            <img src="blossompix.png" alt="PROJECT BLOSSOM Logo" class="intro-logo">
+            <h1 class="intro-title">PROJECT BLOSSOM</h1>
+            <p class="intro-description" id="introDescription">Watch claude paint live and evolve constantly, and <br>ask him questions about his artwork.</p>
+            <button class="enter-button" onclick="enterWebsite()">Enter Website</button>
+        </div>
+    </div>
+
+    <!-- Main Website -->
+    <div class="main-website" id="mainWebsite">
+        <div class="container">
+        <header class="professional-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="blossompix.png" alt="PROJECT BLOSSOM Logo" class="logo-image">
+                </div>
+        <div class="header-tabs">
+            <span class="tab-text active" onclick="switchTab('current')" id="currentTab">Canva</span>
+            <span class="tab-separator">|</span>
+            <span class="tab-text" onclick="switchTab('gallery')" id="galleryTab">Gallery</span>
+            <span class="tab-separator">|</span>
+            <span class="tab-text" onclick="switchTab('qa')" id="qaTab">Ask Claude</span>
+            <span class="tab-separator">|</span>
+            <span class="tab-text" onclick="switchTab('docs')" id="docsTab">Docs</span>
+        </div>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalArtworks">0</span>
+                        <span class="stat-label">Artworks</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="paintingTime">00:00</span>
+                        <span class="stat-label">Painting Since</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-animation"></div>
+        </header>
+
+        <div class="main-content">
+
+            <!-- Current Artwork Tab -->
+            <div class="tab-content active" id="currentTabContent">
+                <div class="current-artwork">
+                    <div class="artwork-header">
+                        <h2>Claude is Painting...</h2>
+                        <div class="header-controls">
+                            <div class="timer-display">
+                                <span id="timer">Next artwork in: 10:00</span>
+                            </div>
+                            <button id="resetBtn" class="btn btn-danger" onclick="resetClaude()">Reset All</button>
+                        </div>
+                    </div>
+                    
+                    <div class="artwork-container">
+                        <canvas id="currentCanvas" width="512" height="512"></canvas>
+                        <div class="artwork-info">
+                            <div class="artwork-title" id="artworkTitle">Claude is thinking...</div>
+                            <div class="artwork-description" id="artworkDescription">Watch as Claude brings his vision to life, pixel by pixel...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="consciousness-section">
+                        <div id="claudeConsciousness" class="consciousness-display">
+                            <div class="consciousness-info">
+                                <h4>Claude's Artistic Consciousness</h4>
+                                <p><strong>Phase:</strong> exploration</p>
+                                <p><strong>Artworks Created:</strong> 0</p>
+                                <p><strong>Current Goals:</strong> Create unique, meaningful pixel art</p>
+                                <p><em>Claude is beginning their artistic journey...</em></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Viewer Tab -->
+            <div class="tab-content" id="galleryTabContent">
+                <div class="gallery-viewer">
+                    <div class="gallery-header">
+                        <h2>Gallery Viewer</h2>
+                        <div class="gallery-info">
+                            <span id="galleryCount">0 artworks</span>
+                        </div>
+                    </div>
+                    
+                    <div class="gallery-content">
+                        <div class="gallery-grid">
+                            <div id="gallery" class="gallery">
+                                <!-- Claude's artworks will appear here -->
+                            </div>
+                        </div>
+                        
+                        <div class="gallery-viewer-panel">
+                            <div class="viewer-artwork">
+                                <canvas id="galleryCanvas" width="512" height="512"></canvas>
+                            </div>
+                            <div class="viewer-info">
+                                <div class="viewer-title" id="viewerTitle">Select an artwork to view details</div>
+                                <div class="viewer-description" id="viewerDescription">Click on any artwork in the gallery to see its details here</div>
+                                <div class="viewer-metadata" id="viewerMetadata">
+                                    <p><strong>Created:</strong> <span id="viewerDate">-</span></p>
+                                    <p><strong>Artwork #:</strong> <span id="viewerNumber">-</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ask Claude Tab -->
+            <div class="tab-content" id="qaTabContent">
+                <div class="qa-viewer">
+                    <div class="qa-header">
+                        <h2>Ask Claude About His Art</h2>
+                        <p>Ask Claude questions about his artworks, artistic process, or creative journey!</p>
+                    </div>
+                    
+                    <div class="qa-content">
+                        <div class="qa-conversation">
+                            <div id="qaMessages" class="qa-messages">
+                                <div class="qa-message claude-message">
+                                    <div class="message-avatar">
+                                        <img src="blossompix.png" alt="Claude" class="claude-avatar">
+                                    </div>
+                                    <div class="message-content">
+                                        <p>Hello! I'm Claude, your AI artist. I'd love to answer any questions you have about my artworks, my creative process, or my artistic journey. What would you like to know?</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="qa-input-section">
+                            <div class="qa-input-container">
+                                <textarea id="questionInput" placeholder="Ask Claude anything about his art... (e.g., 'What inspired your latest piece?' or 'How do you choose your color palettes?')" rows="3"></textarea>
+                                <button id="askButton" class="btn btn-primary" onclick="askClaude()">Ask Claude</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Docs Tab -->
+            <div class="tab-content" id="docsTabContent">
+                <div class="docs-viewer">
+                    <div class="docs-header">
+                        <h2>System Documentation</h2>
+                        <p>Learn how PROJECT BLOSSOM works and how to interact with Claude</p>
+                    </div>
+                    
+                    <div class="docs-content">
+                        <div class="docs-section">
+                            <h3>System Architecture</h3>
+                            <p>PROJECT BLOSSOM is a hybrid AI art generation system combining Claude's creative intelligence with deterministic local rendering. The system uses a DSL (Domain Specific Language) approach for pixel art generation.</p>
+                        </div>
+
+                        <div class="docs-section">
+                            <h3>Art Generation Pipeline</h3>
+                            <p>The <strong>Canva</strong> tab shows Claude's current artwork in progress. The generation process includes:</p>
+                            <ul>
+                                <li><strong>Creative Direction:</strong> Claude generates high-level JSON drawing instructions</li>
+                                <li><strong>Local Rendering:</strong> JavaScript interpreter executes commands on 32x32 pixel grid</li>
+                                <li><strong>Pixel-by-Pixel Display:</strong> Simulated live painting with timed delays</li>
+                                <li><strong>Memory Integration:</strong> Instructions and final pixel grid stored for Q&A</li>
+                            </ul>
+                        </div>
+
+                        <div class="docs-section">
+                            <h3>DSL Command System</h3>
+                            <p>Claude outputs structured JSON commands that the renderer executes:</p>
+                            <ul>
+                                <li><strong>Actions:</strong> fill, gradient, circle, rect, line, pattern, noise, glow</li>
+                                <li><strong>Patterns:</strong> dots, grid, waves, spirals, stars, coral, aurora, crystals, circuits</li>
+                                <li><strong>Parameters:</strong> Colors (hex), positions, sizes, densities, intensities</li>
+                                <li><strong>Validation:</strong> JSON preprocessing with syntax error correction</li>
+                            </ul>
+                        </div>
+
+                        <div class="docs-section">
+                            <h3>Gallery System</h3>
+                            <p>The <strong>Gallery</strong> tab displays all completed artworks with:</p>
+                            <ul>
+                                <li><strong>Storage:</strong> LocalStorage persistence with artwork metadata</li>
+                                <li><strong>Rendering:</strong> 32x32 pixel data scaled to 64x64 thumbnails</li>
+                                <li><strong>Viewer:</strong> 512x512 canvas for detailed artwork inspection</li>
+                                <li><strong>Sorting:</strong> Chronological display with newest artworks first</li>
+                            </ul>
+                        </div>
+
+                        <div class="docs-section">
+                            <h3>Q&A System</h3>
+                            <p>The <strong>Ask Claude</strong> tab enables conversation about Claude's art using:</p>
+                            <ul>
+                                <li><strong>Memory Access:</strong> Claude can reference stored artwork data and instructions</li>
+                                <li><strong>Context Awareness:</strong> Access to artistic evolution and reflection history</li>
+                                <li><strong>Technical Knowledge:</strong> Understanding of DSL commands and rendering process</li>
+                                <li><strong>Rate Limiting:</strong> Queue system manages API calls with exponential backoff</li>
+                            </ul>
+                        </div>
+
+                        <div class="docs-section">
+                            <h3>Artistic Consciousness Engine</h3>
+                            <p>Claude's consciousness system tracks artistic development through:</p>
+                            <ul>
+                                <li><strong>Memory Storage:</strong> Persistent localStorage for artistic insights and evolution</li>
+                                <li><strong>Phase Tracking:</strong> Exploration → Refinement → Experimentation → Mastery</li>
+                                <li><strong>Reflection System:</strong> Post-creation analysis and learning extraction</li>
+                                <li><strong>Goal Evolution:</strong> Dynamic artistic objectives based on experience</li>
+                            </ul>
+                        </div>
+
+                        <div class="docs-section">
+                            <h3>Technical Stack</h3>
+                            <p>Core technologies and frameworks:</p>
+                            <ul>
+                                <li><strong>Frontend:</strong> Vanilla JavaScript, HTML5 Canvas, CSS3 with CSS Variables</li>
+                                <li><strong>Backend:</strong> Node.js Express server with RESTful API endpoints</li>
+                                <li><strong>AI Integration:</strong> Anthropic Claude API for creative direction and Q&A</li>
+                                <li><strong>Storage:</strong> Browser localStorage for artwork persistence and memory</li>
+                                <li><strong>Rendering:</strong> Custom pixel art DSL interpreter with 32x32 grid system</li>
+                            </ul>
+                        </div>
+
+                        <div class="docs-section">
+                            <h3>Performance & Optimization</h3>
+                            <p>System optimizations and technical considerations:</p>
+                            <ul>
+                                <li><strong>Rate Limiting:</strong> 15-second delays between API calls to prevent 429 errors</li>
+                                <li><strong>Request Queue:</strong> Priority-based queue system for API call management</li>
+                                <li><strong>Canvas Optimization:</strong> Pixel-perfect rendering with image-rendering CSS properties</li>
+                                <li><strong>Memory Management:</strong> Efficient storage of 32x32 pixel arrays and metadata</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-label">Artist Status:</span>
+                <span id="status" class="status-value">Claude is working...</span>
+            </div>
+            <div class="social-buttons">
+                <a href="https://twitter.com" target="_blank" class="social-button twitter">
+                    <img src="twitter button.png" alt="Twitter" class="social-button-icon">
+                </a>
+                <a href="https://github.com" target="_blank" class="social-button github">
+                    <img src="Github button.png" alt="GitHub" class="social-button-icon">
+                </a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
